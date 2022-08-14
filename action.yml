@@ -29,9 +29,13 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - run: python -m pip install bumpver
+      shell: bash
     - run: python -m bumpver update ${{ github.event.inputs.version_upgrade }} --commit --push --tag-commit
+      shell: bash
     - id: sha
       run: |
         sha_new=$(git rev-parse HEAD)
         echo $sha_new
         echo "::set-output name=SHA::$sha_new"
+      shell: bash

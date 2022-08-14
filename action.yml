@@ -1,0 +1,37 @@
+name: 'Bump Version and commit'
+description: 'Bumps version using python bumpver'
+
+inputs:
+  version_upgrade:
+    description: 'Which part of semantic version do you want to increment?'
+    required: true
+    default: '--patch'
+    type: choice
+    options:
+    - '--patch'
+    - '--minor'
+    - '--major'
+    - 'none'
+  commit_user_name:
+    description: Name used for the commit user
+    required: false
+    default: github-actions[bot]
+  commit_user_email:
+    description: Email address used for the commit user
+    required: false
+    default: github-actions[bot]@users.noreply.github.com
+
+outputs:
+  new_sha:
+    description: "ID of commit which updated the version"
+    value: ${{ steps.sha.outputs.SHA }}
+
+runs:
+  using: "composite"
+  steps:
+    - run: python -m bumpver update ${{ github.event.inputs.version_upgrade }} --commit --push --tag-commit
+    - id: sha
+      run: |
+        sha_new=$(git rev-parse HEAD)
+        echo $sha_new
+        echo "::set-output name=SHA::$sha_new"

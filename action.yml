@@ -27,7 +27,7 @@ outputs:
     value: ${{ steps.sha.outputs.SHA }}
   new_version:
     description: "New semantic version"
-    value: ${{ steps.bump_ver.outputs.new_version }}
+    value: ${{ steps.bump_ver.outputs.BUMP_VER }}
 
 runs:
   using: "composite"

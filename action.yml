@@ -25,13 +25,21 @@ outputs:
   new_sha:
     description: "ID of commit which updated the version"
     value: ${{ steps.sha.outputs.SHA }}
+  new_version:
+    description: "New semantic version"
+    value: ${{ steps.bump_ver.outputs.new_version }}
 
 runs:
   using: "composite"
   steps:
     - run: python -m pip install bumpver
       shell: bash
-    - run: python -m bumpver update ${{ github.event.inputs.version_upgrade }} --commit --push --tag-commit
+    - id: bump_ver
+      run: |
+        python -m bumpver update ${{ github.event.inputs.version_upgrade }} --commit --push --tag-commit
+        new_version=$(python -m bumpver show --env -n | grep -o 'CURRENT_VERSION=\S*' | cut -d= -f2)
+        echo $new_version
+        echo "::set-output name=BUMP_VER::$new_version"
       shell: bash
     - id: sha
       run: |

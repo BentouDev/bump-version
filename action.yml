@@ -39,11 +39,11 @@ runs:
         python -m bumpver update ${{ github.event.inputs.version_upgrade }} --commit --push --tag-commit
         new_version=$(python -m bumpver show --env -n | grep -o 'CURRENT_VERSION=\S*' | cut -d= -f2)
         echo $new_version
-        echo "::set-output name=BUMP_VER::$new_version"
+        echo "BUMP_VER=$new_version" >> $GITHUB_OUTPUT
       shell: bash
     - id: sha
       run: |
         sha_new=$(git rev-parse HEAD)
         echo $sha_new
-        echo "::set-output name=SHA::$sha_new"
+        echo "SHA=$sha_new" >> $GITHUB_OUTPUT
       shell: bash

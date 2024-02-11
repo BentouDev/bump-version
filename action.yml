@@ -38,6 +38,7 @@ runs:
       run: |
         git config --global user.email ${{ github.event.inputs.commit_user_email }}
         git config --global user.name ${{ github.event.inputs.commit_user_name }}
+      shell: bash
     - id: bump_ver
       run: |
         python -m bumpver update ${{ github.event.inputs.version_upgrade }} --commit --push --tag-commit
